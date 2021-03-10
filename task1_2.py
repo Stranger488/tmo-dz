@@ -1,5 +1,3 @@
-import math
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -20,13 +18,13 @@ class ModelWithBoundedQueue:
         self.model_without_queue = ModelWithoutQueue()
 
     def get_p_0(self, n, m):
-        sum1 = np.sum([np.power(lambd, k) / (math.factorial(k) * np.power(mu, k)) for k in range(1, n + 1)])
+        sum1 = np.sum([np.power(lambd, k) / (np.math.factorial(k) * np.power(mu, k)) for k in range(1, n + 1)])
         sum2 = np.sum([np.power(lambd / (n * mu), l) for l in range(1, m + 1)])
 
-        return 1 / (1 + sum1 + sum2 * np.power(lambd, n) / (math.factorial(n) * np.power(mu, n + 1)))
+        return 1 / (1 + sum1 + sum2 * np.power(lambd, n) / (np.math.factorial(n) * np.power(mu, n + 1)))
 
     def get_p_k(self, k, n, m):
-        return np.power(lambd, k) / (math.factorial(k) * np.power(mu, k)) * self.get_p_0(n, m)
+        return np.power(lambd, k) / (np.math.factorial(k) * np.power(mu, k)) * self.get_p_0(n, m)
 
     def get_p_n_plus_l(self, l, n, m):
         return np.power(lambd / (n * mu), l) * self.get_p_k(n, n, m)
@@ -133,7 +131,7 @@ class ModelWithBoundedQueue:
                               ylabel='Вероятность существования очереди p_Q',
                               label='График зависимости p_Q(m), n={}'.format(cur_n))
             self.plot_on_axes(axes5, m_arr, Q_arr, c=cmap(cur_n), xlabel='Длина очереди m',
-                              ylabel='Мат. ожидание длины очеред Q',
+                              ylabel='Мат. ожидание длины очереди Q',
                               label='График зависимости Q(m), n={}'.format(cur_n))
             self.plot_on_axes(axes6, m_arr, k_Q_arr, c=cmap(cur_n), xlabel='Длина очереди m',
                               ylabel='Коэффициент загрузки операторов k_Q',
@@ -197,7 +195,7 @@ class ModelWithBoundedQueue:
                               ylabel='Вероятность существования очереди p_Q',
                               label='График зависимости p_Q(n), m={}'.format(cur_m))
             self.plot_on_axes(axes11, n_arr, Q_arr, c=cmap(cur_m), xlabel='Число операторов n',
-                              ylabel='Мат. ожидание длины очеред Q',
+                              ylabel='Мат. ожидание длины очереди Q',
                               label='График зависимости Q(n), m={}'.format(cur_m))
             self.plot_on_axes(axes12, n_arr, k_Q_arr, c=cmap(cur_m), xlabel='Число операторов n',
                               ylabel='Коэффициент загрузки операторов k_Q',

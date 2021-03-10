@@ -6,7 +6,12 @@ from config import *
 
 class ModelWithoutQueue:
     def __init__(self):
-        pass
+        # controls default text sizes
+        plt.rc('font', size=3)
+
+        # fontsize of tick labels
+        plt.rc('xtick', labelsize=5)
+        plt.rc('ytick', labelsize=5)
 
     def get_p_0(self, n):
         return 1 / (1 + np.sum(
@@ -21,15 +26,7 @@ class ModelWithoutQueue:
     def get_k_load(self, n_busy, n):
         return n_busy / n
 
-    def plot(self, x, y, c="blue", label="label", xlabel="xlabel", ylabel="ylabel", is_savefig=False):
-
-        # controls default text sizes
-        plt.rc('font', size=3)
-
-        # fontsize of tick labels
-        plt.rc('xtick', labelsize=5)
-        plt.rc('ytick', labelsize=5)
-
+    def plot(self, x, y, c="blue", label="label", xlabel="xlabel", ylabel="ylabel"):
         fig, axes = plt.subplots(nrows=1, ncols=1, figsize=figsize_standart, dpi=dpi_standart)
 
         axes.plot(x, y, color=c, linewidth=linewidth_standart, label=label)
@@ -40,11 +37,7 @@ class ModelWithoutQueue:
         axes.set_xlabel(xlabel)
         axes.set_ylabel(ylabel)
 
-        if is_savefig:
-            fig.savefig('fig.png', dpi=dpi_standart, bbox_inches='tight')
-
     def solve(self):
-
         # Текущеее число операторов
         cur_n = 1
 
@@ -74,12 +67,14 @@ class ModelWithoutQueue:
 
             cur_n += 1
 
-        self.plot(n_arr, p_decline_arr, c='red', xlabel='Число операторов n', ylabel='Вероятность отказа p_k',
-             label='График зависимости p_k(n)')
+        self.plot(n_arr, p_decline_arr, c='red', xlabel='Число операторов n',
+                  ylabel='Вероятность отказа p_k',
+                  label='График зависимости p_k(n)')
         self.plot(n_arr, n_busy_arr, c='green', xlabel='Число операторов n',
-             ylabel='Мат. ожидание числа занятых операторов n_busy',
-             label='График зависимости n_busy(n)')
-        self.plot(n_arr, k_load_arr, c='blue', xlabel='Число операторов n', ylabel='Коэффициент загрузки операторов k_load',
-             label='График зависимости k_load(n)')
+                  ylabel='Мат. ожидание числа занятых операторов n_busy',
+                  label='График зависимости n_busy(n)')
+        self.plot(n_arr, k_load_arr, c='blue', xlabel='Число операторов n',
+                  ylabel='Коэффициент загрузки операторов k_load',
+                  label='График зависимости k_load(n)')
 
         plt.show()
