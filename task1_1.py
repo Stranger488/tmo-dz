@@ -26,7 +26,7 @@ class ModelWithoutQueue:
     def get_k_load(self, n_busy, n):
         return n_busy / n
 
-    def plot(self, x, y, c="blue", label="label", xlabel="xlabel", ylabel="ylabel"):
+    def plot(self, x, y, c='blue', label='label', xlabel='xlabel', ylabel='ylabel'):
         fig, axes = plt.subplots(nrows=1, ncols=1, figsize=figsize_standart, dpi=dpi_standart)
 
         axes.plot(x, y, color=c, linewidth=linewidth_standart, label=label)

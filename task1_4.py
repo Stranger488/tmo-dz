@@ -6,7 +6,7 @@ from config import *
 from task1_1 import ModelWithoutQueue
 
 
-class ModelWithInfiniteQueue:
+class ModelWithLeft:
     def __init__(self):
         # controls default text sizes
         plt.rc('font', size=3)
@@ -17,30 +17,35 @@ class ModelWithInfiniteQueue:
 
         self.model_without_queue = ModelWithoutQueue()
 
-    def get_p_0(self, n):
-        sum = np.sum([np.power(lambd, k) / (np.math.factorial(k) * np.power(mu, k)) for k in range(1, n + 1)])
+    def get_mult(self, l, n):
+        return np.prod([n * mu + i * nu for i in range(1, l + 1)])
 
-        return 1 / (1 + sum + np.power(lambd, n + 1) / (np.math.factorial(n) * np.power(mu, n) * (n * mu - lambd)))
+    def get_p_0(self, n, M):
+        sum1 = np.sum([np.power(lambd, k) / (np.math.factorial(k) * np.power(mu, k)) for k in range(1, n + 1)])
+        sum2 = np.sum([np.power(lambd, l) / self.get_mult(l, n) for l in range(1, M + 1)])
 
-    def get_p_k(self, k, n):
-        return np.power(lambd, k) / (np.math.factorial(k) * np.power(mu, k)) * self.get_p_0(n)
+        return 1 / (1 + sum1 + sum2 * np.power(lambd, n) / (np.math.factorial(n) * np.power(mu, n)))
 
-    def get_p_n_plus_l(self, l, n):
-        return np.power(lambd / (n * mu), l) * self.get_p_k(n, n)
+    def get_p_k(self, k, n, M):
+        return np.power(lambd, k) / (np.math.factorial(k) * np.power(mu, k)) * self.get_p_0(n, M)
 
-    def get_n_busy(self, n):
-        sum = np.sum([k * self.get_p_k(k, n) for k in range(1, n + 1)])
+    def get_p_n_plus_l(self, l, n, M):
+        return np.power(lambd, l) * self.get_p_k(n, n, M) / self.get_mult(l, n)
 
-        return sum + n * self.get_p_k(n, n) * lambd / (n * mu - lambd)
+    def get_n_busy(self, n, M):
+        sum1 = np.sum([k * self.get_p_k(k, n, M) for k in range(1, n + 1)])
+        sum2 = np.sum([self.get_p_n_plus_l(l, n, M) for l in range(1, n + 1)])
+
+        return sum1 + n * sum2
 
     def get_k_load(self, n_busy, n):
         return n_busy / n
 
-    def get_p_Q(self, n):
-        return self.get_p_k(n, n) * lambd / (n * mu - lambd)
+    def get_p_Q(self, n, M):
+        return np.sum([self.get_p_n_plus_l(l, n, M) for l in range(1, M + 1)])
 
-    def get_Q(self, n):
-        return self.get_p_k(n, n) * n * mu * lambd / np.power(n * mu - lambd, 2)
+    def get_Q(self, n, M):
+        return np.sum([l * self.get_p_n_plus_l(l, n, M) for l in range(1, M + 1)])
 
     def plot(self, x, y, c='blue', label='label', xlabel='xlabel', ylabel='ylabel'):
         fig, axes = plt.subplots(nrows=1, ncols=1, figsize=figsize_standart, dpi=dpi_standart)
@@ -80,10 +85,10 @@ class ModelWithInfiniteQueue:
         Q_arr = np.array([])
 
         while cur_p_decline_without_Q >= 0.01:
-            cur_n_busy = self.get_n_busy(cur_n)
+            cur_n_busy = self.get_n_busy(cur_n, M)
             cur_k_load = self.get_k_load(cur_n_busy, cur_n)
-            cur_p_Q = self.get_p_Q(cur_n)
-            cur_Q = self.get_Q(cur_n)
+            cur_p_Q = self.get_p_Q(cur_n, M)
+            cur_Q = self.get_Q(cur_n, M)
 
             n_arr = np.append(n_arr, cur_n)
 
