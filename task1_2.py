@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from config import *
+from config1 import *
 
 from task1_1 import ModelWithoutQueue
 
