@@ -48,9 +48,9 @@ class ModelWithBoundedQueue:
         return Q / m
 
     def plot_on_axes(self, axes, x, y, c='green', label='label', xlabel='xlabel', ylabel='ylabel'):
+        axes.grid()
         axes.plot(x, y, color=c, linestyle='--', linewidth=linewidth_standart, label=label)
 
-        axes.grid()
 
         axes.legend(loc='best')
         axes.set_xlabel(xlabel)
@@ -134,7 +134,7 @@ class ModelWithBoundedQueue:
                               ylabel='Мат. ожидание длины очереди Q',
                               label='График зависимости Q(m), n={}'.format(cur_n))
             self.plot_on_axes(axes6, m_arr, k_Q_arr, c=cmap(cur_n), xlabel='Длина очереди m',
-                              ylabel='Коэффициент загрузки операторов k_Q',
+                              ylabel='Коэффициент занятости мест в очереди k_Q',
                               label='График зависимости k_Q(m), n={}'.format(cur_n))
 
             cur_n += 1
@@ -198,7 +198,7 @@ class ModelWithBoundedQueue:
                               ylabel='Мат. ожидание длины очереди Q',
                               label='График зависимости Q(n), m={}'.format(cur_m))
             self.plot_on_axes(axes12, n_arr, k_Q_arr, c=cmap(cur_m), xlabel='Число операторов n',
-                              ylabel='Коэффициент загрузки операторов k_Q',
+                              ylabel='Коэффициент занятости мест в очереди k_Q',
                               label='График зависимости k_Q(n), m={}'.format(cur_m))
 
         plt.show()

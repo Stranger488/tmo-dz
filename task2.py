@@ -17,16 +17,33 @@ class ModelProduction:
         return np.prod([N - x + 1 for x in range(1, k + 1)])
 
     def get_p_0(self, n, N):
-        sum1 = np.sum([self.get_mult(k, N) * np.power(lambd / mu, k) / np.math.factorial(n) for k in range(1, n + 1)])
-        sum2 = np.sum([self.get_mult(n, N) * np.power(lambd / mu, n + l) / (np.power(n, l) * np.math.factorial(n)) for l in range(1, N - n + 1)])
+        sum1 = np.sum([np.math.factorial(N) / np.math.factorial(N - k) / np.math.factorial(k) * np.power(lambd / mu, k) for k in range(1, n + 1)])
+
+        sum2 = 0
+        p_n_k_minus_1 = np.math.factorial(N) / np.math.factorial(N - n) / np.math.factorial(n) * np.power(lambd / mu, n)
+        for k in range(1, N - n + 1):
+            p_n_k_cur = (N - n + 1 - k) / n * (lambd / mu) * p_n_k_minus_1
+            sum2 += p_n_k_cur
+            p_n_k_minus_1 = p_n_k_cur
 
         return 1 / (1 + sum1 + sum2)
 
+        # sum1 = np.sum([self.get_mult(k, N) * np.power(lambd / mu, k) / np.math.factorial(n) for k in range(1, n + 1)])
+        # sum2 = np.sum([self.get_mult(n, N) * np.power(lambd / mu, n + l) / (np.power(n, l) * np.math.factorial(n)) for l in range(1, N - n + 1)])
+
+        # return 1 / (1 + sum1 + sum2)
+
     def get_p_k(self, k, n, N):
-        return self.get_mult(k, N) * np.power(lambd / mu, k) * self.get_p_0(n, N) / np.math.factorial(k)
+        return np.math.factorial(N) * np.power(lambd, k) * self.get_p_0(n, N) / (np.math.factorial(N - k) * np.math.factorial(k) * np.power(mu, k))
+
+        # return self.get_mult(k, N) * np.power(lambd / mu, k) * self.get_p_0(n, N) / np.math.factorial(k)
 
     def get_p_n_plus_l(self, l, n, N):
-        return self.get_mult(n, N) * np.power(lambd / mu, n + l) * self.get_p_0(n, N) / (np.power(n, l) * np.math.factorial(n))
+        if l == 1:
+            return (N - n + 1 - l) / n * (lambd / mu) * self.get_p_k(n, n, N)
+        else:
+            return (N - n + 1 - l) / n * (lambd / mu) * self.get_p_n_plus_l(l - 1, n, N)
+        # return self.get_mult(n, N) * np.power(lambd / mu, n + l) * self.get_p_0(n, N) / (np.power(n, l) * np.math.factorial(n))
 
     def get_M_free(self, n, N):
         return np.sum([k * self.get_p_k(k, n, N) for k in range(1, N + 1)])

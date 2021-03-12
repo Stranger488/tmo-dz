@@ -19,8 +19,10 @@ class ModelWithInfiniteQueue:
 
     def get_p_0(self, n):
         sum = np.sum([np.power(lambd, k) / (np.math.factorial(k) * np.power(mu, k)) for k in range(1, n + 1)])
+        a = lambd / (n * mu)
+        coef = a / (1 - a)
 
-        return 1 / (1 + sum + np.power(lambd, n + 1) / (np.math.factorial(n) * np.power(mu, n) * (n * mu - lambd)))
+        return 1 / (1 + sum + coef * np.power(lambd, n) / (np.math.factorial(n) * np.power(mu, n)))
 
     def get_p_k(self, k, n):
         return np.power(lambd, k) / (np.math.factorial(k) * np.power(mu, k)) * self.get_p_0(n)
@@ -29,9 +31,15 @@ class ModelWithInfiniteQueue:
         return np.power(lambd / (n * mu), l) * self.get_p_k(n, n)
 
     def get_n_busy(self, n):
+
+        a = lambd / (n * mu)
+        coef = a / (1 - a)
+
+        # if a >= 1:
+        #     return 0
         sum = np.sum([k * self.get_p_k(k, n) for k in range(1, n + 1)])
 
-        return sum + n * self.get_p_k(n, n) * lambd / (n * mu - lambd)
+        return sum + n * self.get_p_k(n, n) * coef
 
     def get_k_load(self, n_busy, n):
         return n_busy / n

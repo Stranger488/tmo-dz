@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     # model_without_queue.solve()
     # model_with_bounded_queue.solve()
-    # model_with_infinite_queue.solve()
+    model_with_infinite_queue.solve()
     # model_with_left.solve()
 
-    model_production.solve()
+    # model_production.solve()

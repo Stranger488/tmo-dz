@@ -85,6 +85,8 @@ class ModelWithLeft:
         Q_arr = np.array([])
 
         while cur_p_decline_without_Q >= 0.01:
+            print(self.get_p_0(cur_n, M))
+
             cur_n_busy = self.get_n_busy(cur_n, M)
             cur_k_load = self.get_k_load(cur_n_busy, cur_n)
             cur_p_Q = self.get_p_Q(cur_n, M)
