@@ -14,8 +14,9 @@ class ModelWithoutQueue:
         plt.rc('ytick', labelsize=5)
 
     def get_p_0(self, n):
-        return 1 / (1 + np.sum(
-            [np.power(lambd, k) / (np.math.factorial(k) * np.power(mu, k)) for k in range(1, n + 1)]))
+        sum = np.sum([np.power(lambd, k) / (np.math.factorial(k) * np.power(mu, k)) for k in range(1, n + 1)])
+
+        return 1 / (1 + sum)
 
     def get_p_k(self, k, n):
         return np.power(lambd, k) / (np.math.factorial(k) * np.power(mu, k)) * self.get_p_0(n)
@@ -68,8 +69,8 @@ class ModelWithoutQueue:
             cur_n += 1
 
         self.plot(n_arr, p_decline_arr, c='red', xlabel='Число операторов n',
-                  ylabel='Вероятность отказа p_k',
-                  label='График зависимости p_k(n)')
+                  ylabel='Вероятность отказа p_отк',
+                  label='График зависимости p_отк(n)')
         self.plot(n_arr, n_busy_arr, c='green', xlabel='Число операторов n',
                   ylabel='Мат. ожидание числа занятых операторов n_busy',
                   label='График зависимости n_busy(n)')

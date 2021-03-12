@@ -21,7 +21,7 @@ class ModelWithBoundedQueue:
         sum1 = np.sum([np.power(lambd, k) / (np.math.factorial(k) * np.power(mu, k)) for k in range(1, n + 1)])
         sum2 = np.sum([np.power(lambd / (n * mu), l) for l in range(1, m + 1)])
 
-        return 1 / (1 + sum1 + sum2 * np.power(lambd, n) / (np.math.factorial(n) * np.power(mu, n + 1)))
+        return 1 / (1 + sum1 + sum2 * np.power(lambd, n) / (np.math.factorial(n) * np.power(mu, n)))
 
     def get_p_k(self, k, n, m):
         return np.power(lambd, k) / (np.math.factorial(k) * np.power(mu, k)) * self.get_p_0(n, m)
@@ -102,7 +102,7 @@ class ModelWithBoundedQueue:
 
             m_arr = np.array([])
             for cur_m in range(1, M + 1):
-                cur_p_decline = self.get_p_k(cur_n, cur_n, cur_m)
+                cur_p_decline = self.get_p_n_plus_l(cur_m, cur_n, cur_m)
                 cur_n_busy = self.get_n_busy(cur_n, cur_m)
                 cur_k_load = self.get_k_load(cur_n_busy, cur_n)
                 cur_p_Q = self.get_p_Q(cur_n, cur_m)
@@ -119,8 +119,8 @@ class ModelWithBoundedQueue:
                 k_Q_arr = np.append(k_Q_arr, cur_k_Q)
 
             self.plot_on_axes(axes1, m_arr, p_decline_arr, c=cmap(cur_n), xlabel='Длина очереди m',
-                              ylabel='Вероятность отказа p_k',
-                              label='График зависимости p_k(m), n={}'.format(cur_n))
+                              ylabel='Вероятность отказа p_отк',
+                              label='График зависимости p_отк(m), n={}'.format(cur_n))
             self.plot_on_axes(axes2, m_arr, n_busy_arr, c=cmap(cur_n), xlabel='Длина очереди m',
                               ylabel='Мат. ожидание числа занятых операторов n_busy',
                               label='График зависимости n_busy(m), n={}'.format(cur_n))
@@ -163,7 +163,7 @@ class ModelWithBoundedQueue:
 
             cur_n = 1
             while cur_p_decline_without_Q >= 0.01:
-                cur_p_decline = self.get_p_k(cur_n, cur_n, cur_m)
+                cur_p_decline = self.get_p_n_plus_l(cur_m, cur_n, cur_m)
                 cur_n_busy = self.get_n_busy(cur_n, cur_m)
                 cur_k_load = self.get_k_load(cur_n_busy, cur_n)
                 cur_p_Q = self.get_p_Q(cur_n, cur_m)
@@ -183,8 +183,8 @@ class ModelWithBoundedQueue:
                 cur_p_decline_without_Q = self.model_without_queue.get_p_k(cur_n, cur_n)
 
             self.plot_on_axes(axes7, n_arr, p_decline_arr, c=cmap(cur_m), xlabel='Число операторов n',
-                              ylabel='Вероятность отказа p_k',
-                              label='График зависимости p_k(n), m={}'.format(cur_m))
+                              ylabel='Вероятность отказа p_отк',
+                              label='График зависимости p_отк(n), m={}'.format(cur_m))
             self.plot_on_axes(axes8, n_arr, n_busy_arr, c=cmap(cur_m), xlabel='Число операторов n',
                               ylabel='Мат. ожидание числа занятых операторов n_busy',
                               label='График зависимости n_busy(n), m={}'.format(cur_m))

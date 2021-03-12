@@ -18,18 +18,15 @@ class ModelProduction:
 
     def get_p_0(self, n, N):
         sum1 = np.sum([self.get_mult(k, N) * np.power(lambd / mu, k) / np.math.factorial(n) for k in range(1, n + 1)])
-
-        mult1 = lambda x: self.get_mult(x, N) * np.power(lambd / (n * mu), x) / np.math.factorial(n)
-        mult2 = self.get_mult(n, N) * np.power(lambd / mu, n) / np.math.factorial(n)
-        sum2 = np.sum(mult1(l) * mult2 for l in range(1, N - n + 1))
+        sum2 = np.sum([self.get_mult(n, N) * np.power(lambd / mu, n + l) / (np.power(n, l) * np.math.factorial(n)) for l in range(1, N - n + 1)])
 
         return 1 / (1 + sum1 + sum2)
 
     def get_p_k(self, k, n, N):
-        return self.get_mult(k, N) * np.power(lambd / mu, k) * self.get_p_0(n, N)/ np.math.factorial(n)
+        return self.get_mult(k, N) * np.power(lambd / mu, k) * self.get_p_0(n, N) / np.math.factorial(k)
 
     def get_p_n_plus_l(self, l, n, N):
-        return self.get_mult(l, N) * np.power(lambd / (n * mu), l) * self.get_p_k(n, n, N)
+        return self.get_mult(n, N) * np.power(lambd / mu, n + l) * self.get_p_0(n, N) / (np.power(n, l) * np.math.factorial(n))
 
     def get_M_free(self, n, N):
         return np.sum([k * self.get_p_k(k, n, N) for k in range(1, N + 1)])
